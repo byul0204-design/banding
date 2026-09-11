@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>관리자 | LK 홈타운 밴딩머신</title>
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <!-- Decap CMS: 글 작성·수정·삭제, 이미지 업로드, 사이트 설정 -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // 미리보기 화면에 실제 사이트와 같은 스타일 적용
+    CMS.registerPreviewStyle('https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css');
+    CMS.registerPreviewStyle('/assets/css/style.css');
+
+    var CATS = { product: '제품 소개', cases: '설치 사례', startup: '창업·운영 정보', notice: '공지사항' };
+
+    var PostPreview = createClass({
+      render: function () {
+        var entry = this.props.entry;
+        var thumb = entry.getIn(['data', 'thumbnail']);
+        var cat = entry.getIn(['data', 'category']);
+        var asset = thumb ? this.props.getAsset(thumb) : null;
+        return h('article', { className: 'post' },
+          h('div', { className: 'post-wrap' },
+            h('span', { className: 'post-cat' }, CATS[cat] || cat || ''),
+            h('h1', {}, entry.getIn(['data', 'title']) || '제목을 입력하세요'),
+            asset ? h('figure', { className: 'post-cover' }, h('img', { src: asset.toString(), alt: '' })) : null,
+            h('div', { className: 'prose' }, this.props.widgetFor('body'))
+          )
+        );
+      }
+    });
+    CMS.registerPreviewTemplate('posts', PostPreview);
+  </script>
+</body>
+</html>
