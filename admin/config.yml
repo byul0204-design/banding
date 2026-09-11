@@ -5,7 +5,7 @@
 # ============================================================
 backend:
   name: github
-  repo: repo: byul0204-design/banding
+  repo:  byul0204-design/banding
   branch: main
   commit_messages:
     create: "글 작성: {{slug}}"
