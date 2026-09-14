@@ -252,6 +252,9 @@ const postCard = (p, headingTag = 'h3') => `
           <time datetime="${p.date.toISOString()}">${fmtDate(p.date)}</time>
         </a></li>`;
 
+const postRow = (p) => `
+        <li><a href="${p.url}"><span class="cat">${esc(p.category.label)}</span><span class="title">${esc(p.title)}</span><time datetime="${p.date.toISOString()}">${fmtDate(p.date)}</time></a></li>`;
+
 const postGrid = (list) => list.length
   ? `<ul class="post-grid">${list.map((p) => postCard(p, 'h2')).join('')}\n      </ul>`
   : `<div class="empty"><p>아직 발행된 글이 없어요.</p></div>`;
@@ -301,7 +304,7 @@ ${verify}
 `);
   home = home.replace(/content="assets\/img\/og-image\.jpg"/, `content="${absUrl('/assets/img/og-image.jpg')}"`);
   home = replaceBlock(home, 'LATEST_POSTS', posts.length
-    ? `\n      <ul class="post-grid">${posts.slice(0, 3).map((p) => postCard(p)).join('')}\n      </ul>\n      `
+    ? `\n      <ul class="post-list">${posts.slice(0, 6).map((p) => postRow(p)).join('')}\n      </ul>\n      `
     : `\n      <div class="empty"><p>첫 글을 준비하고 있어요.</p></div>\n      `);
   home = replaceBlock(home, 'HOURS', settings.hours ? `<p class="hours">상담 시간 ${esc(settings.hours)}</p>` : '');
   home = replaceBlock(home, 'BIZINFO', bizInfoHtml())
