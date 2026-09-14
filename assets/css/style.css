@@ -435,6 +435,37 @@ button { font: inherit; }
 
 .section-foot { margin-top: 40px; }
 
+/* ---------- 컴팩트 글 목록 (메인 하단) ---------- */
+.section--tight { padding: 56px 0 72px; }
+
+.latest-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.latest-head h2 { font-size: 22px; }
+.latest-head a { font-size: 15px; font-weight: 600; text-decoration: none; }
+.latest-head a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.latest-head a::after { content: " ›"; }
+
+.post-list { border-top: 2px solid var(--ink); }
+.post-list li { list-style: none; border-bottom: 1px solid var(--line); }
+.post-list a {
+  display: grid; grid-template-columns: 7.5em 1fr auto; align-items: center; gap: 20px;
+  padding: 15px 6px; color: inherit; text-decoration: none;
+}
+.post-list a:hover { background: var(--white); color: inherit; }
+.post-list .cat { font-size: 13.5px; font-weight: 600; color: var(--blue); }
+.post-list .title {
+  font-size: 16.5px; font-weight: 550;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.post-list a:hover .title { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.post-list time { font-size: 14px; color: #7b8496; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 600px) {
+  .post-list a { grid-template-columns: 1fr auto; gap: 4px 12px; padding: 14px 4px; }
+  .post-list .cat { grid-column: 1; grid-row: 1; }
+  .post-list time { grid-column: 2; grid-row: 1; }
+  .post-list .title { grid-column: 1 / -1; grid-row: 2; white-space: normal; }
+}
+
 @media (max-width: 900px) { .post-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .post-grid { grid-template-columns: 1fr; } }
 
