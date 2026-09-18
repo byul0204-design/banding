@@ -1,0 +1,30 @@
+---
+layout: base.njk
+title: 블로그
+description: 스마트 자판기와 무인매장 운영에 필요한 제품 소식, 설치 사례, 창업 정보를 전해요.
+permalink: /blog/index.html
+---
+<section class="blog-head">
+  <h1>블로그</h1>
+  <p>제품 소식과 설치 사례, 무인 운영 팁을 전해요.</p>
+</section>
+
+<nav class="blog-filter">
+  <a class="is-on" href="/blog/">전체</a>
+  {% for c in collections.categoryList %}
+    <a href="/blog/category/{{ c.slug }}/">{{ c.label }}</a>
+  {% endfor %}
+</nav>
+
+<ul class="post-list">
+  {% for p in collections.blogPosts %}
+  <li>
+    <a href="{{ p.url }}">
+      <span class="post-cat">{{ p.data.categoryLabel }}</span>
+      <strong>{{ p.data.title }}</strong>
+      <span class="post-sum">{{ p.data.description }}</span>
+      <time datetime="{{ p.date | dateISO }}">{{ p.date | dateKR }}</time>
+    </a>
+  </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,38 @@
+# Decap CMS 설정
+# 인증 방식은 README의 '5. 브라우저에서 글쓰기' 항목을 먼저 읽어 주세요.
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "src/assets/img"
+public_folder: "/assets/img"
+locale: "ko"
+
+collections:
+  - name: "post"
+    label: "블로그 글"
+    label_singular: "글"
+    folder: "src/blog/posts"
+    create: true
+    slug: "{{fields.slug}}"
+    extension: "md"
+    format: "yaml-frontmatter"
+    summary: "{{title}} — {{year}}.{{month}}.{{day}}"
+    sortable_fields: ["date", "title"]
+    fields:
+      - { name: "title", label: "제목", widget: "string" }
+      - { name: "slug", label: "글 주소 (영문·하이픈)", widget: "string", hint: "예: vending-machine-install-checklist" }
+      - { name: "description", label: "요약", widget: "text", hint: "검색 결과에 보입니다. 80~140자" }
+      - { name: "date", label: "발행일", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - name: "category"
+        label: "카테고리"
+        widget: "select"
+        options:
+          - { label: "제품 소개", value: "product" }
+          - { label: "창업·운영 정보", value: "startup" }
+          - { label: "설치 사례", value: "case" }
+          - { label: "운영 팁", value: "tip" }
+      - { name: "cover", label: "대표 사진", widget: "image", required: false }
+      - { name: "coverAlt", label: "대표 사진 설명", widget: "string", required: false }
+      - { name: "draft", label: "임시 보관", widget: "boolean", default: false, required: false }
+      - { name: "body", label: "본문", widget: "markdown" }

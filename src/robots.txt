@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+User-agent: Yeti
+Allow: /
+Disallow: /admin
+
+Sitemap: https://lkbanding.netlify.app/sitemap.xml

@@ -1,0 +1,8 @@
+{
+  "layout": "post.njk",
+  "tags": ["post"],
+  "permalink": "/blog/{{ page.fileSlug }}/",
+  "eleventyComputed": {
+    "categoryLabel": "{% if category == 'product' %}제품 소개{% elif category == 'startup' %}창업·운영 정보{% elif category == 'case' %}설치 사례{% elif category == 'tip' %}운영 팁{% else %}소식{% endif %}"
+  }
+}

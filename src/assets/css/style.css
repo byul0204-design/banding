@@ -1,0 +1,68 @@
+/* ──────────────────────────────────────────────────────────
+   임시 스타일입니다.
+   기존 사이트의 assets/css/style.css 로 이 파일을 덮어쓰세요.
+   아래는 블로그 전용으로 새로 쓰는 클래스만 모아둔 것이라,
+   기존 CSS 뒤에 이어 붙이셔도 됩니다.
+────────────────────────────────────────────────────────── */
+:root{--ink:#1c1f23;--muted:#6b7280;--line:#e5e7eb;--brand:#1f5eff;--paper:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Malgun Gothic",sans-serif;
+  color:var(--ink);line-height:1.75;background:var(--paper)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto;display:block}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:99}
+
+.site-header,.site-footer{display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:16px 24px;border-bottom:1px solid var(--line);max-width:1120px;margin:0 auto}
+.site-footer{border-bottom:0;border-top:1px solid var(--line);margin-top:64px;color:var(--muted);font-size:14px}
+.site-logo{display:flex;align-items:center;gap:9px;font-size:15px}
+.site-logo small{display:block;font-size:12px;color:var(--muted)}
+.site-nav{display:flex;gap:18px;font-size:15px;margin-left:auto}
+.site-tel{font-weight:600}
+.site-footer nav{display:flex;gap:16px;flex-wrap:wrap}
+
+main{max-width:800px;margin:0 auto;padding:0 24px}
+.blog-head{padding:48px 0 20px}
+.blog-head h1{font-size:32px;margin:0 0 8px}
+.blog-head p{color:var(--muted);margin:0}
+.blog-filter{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.blog-filter a{border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:14px;color:var(--muted)}
+.blog-filter a.is-on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.post-list{list-style:none;margin:0;padding:0}
+.post-list li{border-bottom:1px solid var(--line)}
+.post-list a{display:block;padding:22px 0}
+.post-cat{display:inline-block;font-size:12px;color:var(--brand);margin-bottom:6px}
+.post-list strong{display:block;font-size:19px;margin-bottom:6px}
+.post-list .post-sum{display:block;color:var(--muted);font-size:15px;margin-bottom:6px}
+.post-list time{font-size:13px;color:var(--muted)}
+
+.post{padding:40px 0}
+.post-head{padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px}
+.post-head h1{font-size:30px;line-height:1.35;margin:10px 0 0}
+.post-head .post-sum{color:var(--muted);margin:12px 0 0}
+.post-meta{font-size:14px;color:var(--muted);margin:14px 0 0}
+.post-cover{border-radius:12px;margin-bottom:32px}
+.post-body h2{font-size:22px;margin:40px 0 12px}
+.post-body h3{font-size:18px;margin:28px 0 8px}
+.post-body p{margin:0 0 18px}
+.post-body ul,.post-body ol{padding-left:22px;margin:0 0 18px}
+.post-body table{border-collapse:collapse;width:100%;margin:0 0 20px;font-size:15px}
+.post-body th,.post-body td{border:1px solid var(--line);padding:9px 12px;text-align:left}
+.post-body th{background:#f8fafc;font-weight:600}
+.post-body blockquote{margin:0 0 18px;padding-left:16px;border-left:3px solid var(--line);color:var(--muted)}
+.post-body code{background:#f1f5f9;border-radius:4px;padding:1px 5px;font-size:.9em}
+
+.post-cta{margin:56px 0 0;padding:26px;border:1px solid var(--line);border-radius:14px;background:#f8fafc}
+.post-cta h2{margin:0 0 8px;font-size:20px}
+.post-cta p{margin:0 0 14px;color:var(--muted)}
+.btn{display:inline-block;background:var(--ink);color:#fff;border-radius:9px;padding:11px 18px;font-size:15px;font-weight:600}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.post-related{margin-top:56px}
+.post-related h2{font-size:20px;margin:0 0 8px}
+
+.home-blog{padding:56px 0}
+.home-blog-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.home-blog-head h2{font-size:24px;margin:0}
+.home-blog-head a{font-size:14px;color:var(--muted)}

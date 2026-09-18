@@ -1,0 +1,36 @@
+---
+layout: base.njk
+title: ""
+description: "24인치 터치 키오스크와 카드·간편결제, 매장 광고 송출까지. 카페·학원·병원·호텔·회사 어디든 24시간 무인 판매를 시작하세요. 3년 무상 A/S, 설치 상담 010-7773-2425."
+permalink: /index.html
+---
+
+{# ══════════════════════════════════════════════════════════
+   ▼ 여기에 기존 index.html의 <main> 안쪽 내용을 통째로
+     붙여넣으세요. (header/footer는 base.njk가 이미 그립니다)
+     맨 아래 '블로그 새 글' 부분만 아래 블록으로 바꾸시면
+     앞으로 자동으로 최신 3개가 채워집니다.
+═══════════════════════════════════════════════════════════ #}
+
+<p style="padding:40px;text-align:center;color:#666">
+  기존 index.html의 &lt;main&gt; 내용을 이 자리에 붙여넣으세요.
+</p>
+
+{# ── 블로그 새 글 (자동 갱신) ──────────────────────────── #}
+<section class="home-blog" id="blog">
+  <div class="home-blog-head">
+    <h2>블로그 새 글</h2>
+    <a href="/blog/">전체 보기</a>
+  </div>
+  <ul class="post-list">
+    {% for p in collections.blogPosts | first(site.postsOnHome) %}
+    <li>
+      <a href="{{ p.url }}">
+        <span class="post-cat">{{ p.data.categoryLabel }}</span>
+        <strong>{{ p.data.title }}</strong>
+        <time datetime="{{ p.date | dateISO }}">{{ p.date | dateKR }}</time>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>

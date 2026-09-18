@@ -1,0 +1,35 @@
+---
+layout: base.njk
+pagination:
+  data: collections.categoryList
+  size: 1
+  alias: cat
+permalink: "/blog/category/{{ cat.slug }}/"
+eleventyComputed:
+  title: "{{ cat.label }}"
+  description: "{{ cat.label }} 관련 글 {{ cat.count }}개를 모았어요."
+---
+<section class="blog-head">
+  <h1>{{ cat.label }}</h1>
+  <p>글 {{ cat.count }}개</p>
+</section>
+
+<nav class="blog-filter">
+  <a href="/blog/">전체</a>
+  {% for c in collections.categoryList %}
+    <a class="{% if c.slug == cat.slug %}is-on{% endif %}" href="/blog/category/{{ c.slug }}/">{{ c.label }}</a>
+  {% endfor %}
+</nav>
+
+<ul class="post-list">
+  {% for p in cat.posts %}
+  <li>
+    <a href="{{ p.url }}">
+      <span class="post-cat">{{ p.data.categoryLabel }}</span>
+      <strong>{{ p.data.title }}</strong>
+      <span class="post-sum">{{ p.data.description }}</span>
+      <time datetime="{{ p.date | dateISO }}">{{ p.date | dateKR }}</time>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
