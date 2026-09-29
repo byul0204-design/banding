@@ -1,30 +1,38 @@
 ---
 layout: base.njk
-title: 블로그
+current: blog
 description: 스마트 자판기와 무인매장 운영에 필요한 제품 소식, 설치 사례, 창업 정보를 전해요.
-permalink: /blog/index.html
+pagination:
+  data: collections.blogPosts
+  size: 12
+  alias: list
+  generatePageOnEmptyData: true
+permalink: "/blog/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNumber + 1 }}/{% endif %}"
+eleventyComputed:
+  title: "{% if pagination.pageNumber > 0 %}블로그 {{ pagination.pageNumber + 1 }}페이지{% else %}블로그{% endif %}"
 ---
-<section class="blog-head">
+<section class="page-head"><div class="wrap">
   <h1>블로그</h1>
   <p>제품 소식과 설치 사례, 무인 운영 팁을 전해요.</p>
-</section>
-
-<nav class="blog-filter">
-  <a class="is-on" href="/blog/">전체</a>
-  {% for c in collections.categoryList %}
-    <a href="/blog/category/{{ c.slug }}/">{{ c.label }}</a>
-  {% endfor %}
-</nav>
-
-<ul class="post-list">
-  {% for p in collections.blogPosts %}
-  <li>
-    <a href="{{ p.url }}">
-      <span class="post-cat">{{ p.data.categoryLabel }}</span>
-      <strong>{{ p.data.title }}</strong>
-      <span class="post-sum">{{ p.data.description }}</span>
-      <time datetime="{{ p.date | dateISO }}">{{ p.date | dateKR }}</time>
-    </a>
-  </li>
-  {% endfor %}
-</ul>
+</div></section>
+<section class="blog-body"><div class="wrap">
+  {% include "cat-nav.njk" %}
+  {%- if list.length %}
+  <ul class="post-grid">
+    {%- set headingTag = 'h2' %}
+    {%- for p in list %}{% include "post-card.njk" %}{% endfor %}
+  </ul>
+  {%- else %}
+  <div class="empty"><p>아직 발행된 글이 없어요.</p></div>
+  {%- endif %}
+  {%- set pages = pagination.hrefs.length %}
+  {%- if pages > 1 %}
+  <nav class="pagination" aria-label="페이지">
+    {%- if pagination.href.previous %}<a href="{{ pagination.href.previous }}" rel="prev">이전</a>{% endif %}
+    {%- for href in pagination.hrefs %}
+      {%- if loop.index0 == pagination.pageNumber %}<span aria-current="page">{{ loop.index }}</span>{% else %}<a href="{{ href }}">{{ loop.index }}</a>{% endif %}
+    {%- endfor %}
+    {%- if pagination.href.next %}<a href="{{ pagination.href.next }}" rel="next">다음</a>{% endif %}
+  </nav>
+  {%- endif %}
+</div></section>

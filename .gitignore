@@ -1,0 +1,8 @@
+# 빌드할 때 자동으로 생기는 폴더 (GitHub에 올리지 않음)
+_site/
+node_modules/
+
+# 운영체제·편집기 임시 파일
+.DS_Store
+Thumbs.db
+desktop.ini

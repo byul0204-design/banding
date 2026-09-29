@@ -1,77 +1,44 @@
 ---
 layout: base.njk
 ogType: article
+current: blog
 ---
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": {{ title | dump | safe }},
-  "description": {{ (description or "") | dump | safe }},
-  "datePublished": "{{ page.date | dateISO }}",
-  "dateModified": "{{ (updated or page.date) | dateISO }}",
-  "image": "{{ site.url }}{{ cover or site.ogImage }}",
-  "mainEntityOfPage": "{{ site.url }}{{ page.url }}",
-  "author": { "@type": "Organization", "name": {{ site.author | dump | safe }} },
-  "publisher": {
-    "@type": "Organization",
-    "name": {{ site.title | dump | safe }},
-    "telephone": {{ site.phone | dump | safe }}
-  },
-  "articleSection": {{ (categoryLabel or "") | dump | safe }}
-}
-</script>
-
-<article class="post">
-  <header class="post-head">
-    {% if categoryLabel %}
-      <a class="post-cat" href="/blog/category/{{ category }}/">{{ categoryLabel }}</a>
-    {% endif %}
-    <h1>{{ title }}</h1>
-    {% if description %}<p class="post-sum">{{ description }}</p>{% endif %}
-    <p class="post-meta">
-      <time datetime="{{ page.date | dateISO }}">{{ page.date | dateKR }}</time>
-      {% if updated %} · <span>{{ updated | dateKR }} 수정</span>{% endif %}
-    </p>
-  </header>
-
-  {% if cover %}
-    <img class="post-cover" src="{{ cover }}" alt="{{ coverAlt or title }}">
-  {% endif %}
-
-  <div class="post-body">
-    {{ content | safe }}
+{%- set canonical = page.url | absUrl -%}
+<article class="post"><div class="post-wrap">
+  <nav class="crumbs" aria-label="현재 위치"><a href="/">홈</a><span aria-hidden="true">›</span><a href="/blog/">블로그</a><span aria-hidden="true">›</span><a href="/blog/category/{{ categoryKey }}/">{{ categoryLabel }}</a></nav>
+  <a class="post-cat" href="/blog/category/{{ categoryKey }}/">{{ categoryLabel }}</a>
+  <h1>{{ title }}</h1>
+  <div class="post-meta"><time datetime="{{ page.date | dateISO }}">{{ page.date | dateKR }}</time>{% if updated %}<span>{{ updated | dateKR }} 수정</span>{% endif %}<span>읽는 데 약 {{ content | readingMinutes }}분</span></div>
+  {%- if image %}
+  <figure class="post-cover"><img src="{{ image }}" alt="{{ coverAlt }}" fetchpriority="high"></figure>
+  {%- endif %}
+  <div class="prose">
+{{ content | postHtml | safe }}
   </div>
-
+  {%- if postTags.length %}
+  <ul class="tags" aria-label="태그">{% for t in postTags %}<li>#{{ t }}</li>{% endfor %}</ul>
+  {%- endif %}
+  <div class="post-tools">
+    <a class="btn btn-line" href="/blog/">목록으로</a>
+    <button class="btn btn-line" type="button" data-copy-url="{{ canonical }}">글 주소 복사</button>
+  </div>
   <aside class="post-cta">
-    <h2>우리 공간에도 놓을 수 있을까요?</h2>
-    <p>설치 장소 사진 한 장만 있어도 상담이 훨씬 빨라져요.</p>
-    <p>
-      <a class="btn" href="{{ site.phoneHref }}">전화 걸기 {{ site.phone }}</a>
-      <a class="btn ghost" href="/#contact">문의 남기기</a>
-    </p>
+    <div>
+      <h2>우리 공간에도 놓을 수 있을까요?</h2>
+      <p>설치 장소와 판매할 상품을 알려주시면 맞는 구성을 제안해 드려요.</p>
+    </div>
+    <div class="btns">
+      <a class="btn btn-call" href="tel:{{ site.tel }}">{{ site.phone }}</a>
+      <a class="btn btn-ghost" href="/#contact">문의 남기기</a>
+    </div>
   </aside>
-
-  {% set related = [] %}
-  {% for p in collections.blogPosts %}
-    {% if p.url != page.url and p.data.category == category and related.length < 3 %}
-      {% set related = (related.push(p), related) %}
-    {% endif %}
-  {% endfor %}
-  {% if related.length %}
-  <section class="post-related">
-    <h2>이어서 읽기</h2>
-    <ul class="post-list">
-      {% for p in related %}
-      <li>
-        <a href="{{ p.url }}">
-          <span class="post-cat">{{ p.data.categoryLabel }}</span>
-          <strong>{{ p.data.title }}</strong>
-          <time datetime="{{ p.date | dateISO }}">{{ p.date | dateKR }}</time>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endif %}
-</article>
+</div></article>
+{%- set related = collections.blogPosts | relatedPosts(page.url, categoryKey) %}
+{%- if related.length %}
+<section class="related section--white"><div class="wrap">
+  <h2>함께 읽으면 좋은 글</h2>
+  <ul class="post-grid">
+    {%- for p in related %}{% include "post-card.njk" %}{% endfor %}
+  </ul>
+</div></section>
+{%- endif %}

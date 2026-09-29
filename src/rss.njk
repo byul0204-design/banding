@@ -5,20 +5,20 @@ eleventyExcludeFromCollections: true
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>{{ site.title }}</title>
+  <title>{{ site.name }} 블로그</title>
   <link>{{ site.url }}/</link>
-  <description>{{ site.description }}</description>
+  <description>스마트 자판기와 무인매장 운영에 필요한 제품 소식, 설치 사례, 창업 정보</description>
   <language>ko</language>
-  <lastBuildDate>{{ collections.blogPosts[0].date | dateRFC }}</lastBuildDate>
+  <lastBuildDate>{{ site.buildTime | dateRFC }}</lastBuildDate>
   <atom:link href="{{ site.url }}/rss.xml" rel="self" type="application/rss+xml"/>
-  {%- for p in collections.blogPosts | reverse | reverse %}
+  {%- for p in collections.blogPosts | head(50) %}
   <item>
-    <title>{{ p.data.title }}</title>
-    <link>{{ site.url }}{{ p.url }}</link>
-    <guid isPermaLink="true">{{ site.url }}{{ p.url }}</guid>
+    <title>{{ p.data.title | cdata | safe }}</title>
+    <link>{{ p.url | absUrl }}</link>
+    <guid isPermaLink="true">{{ p.url | absUrl }}</guid>
     <pubDate>{{ p.date | dateRFC }}</pubDate>
-    <category>{{ p.data.categoryLabel }}</category>
-    <description>{{ p.data.description or (p.templateContent | excerpt(180)) }}</description>
+    <category>{{ p.data.categoryLabel | cdata | safe }}</category>
+    <description>{{ (p.data.description or '') | cdata | safe }}</description>
   </item>
   {%- endfor %}
 </channel>

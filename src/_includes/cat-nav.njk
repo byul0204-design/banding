@@ -1,0 +1,3 @@
+<nav class="cat-nav" aria-label="카테고리"><a href="/blog/"{% if not currentCat %} aria-current="page"{% endif %}>전체</a>
+  {%- for c in collections.categoryList %}<a href="/blog/category/{{ c.key }}/"{% if c.key == currentCat %} aria-current="page"{% endif %}>{{ c.label }}</a>{% endfor -%}
+</nav>

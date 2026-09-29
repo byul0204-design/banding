@@ -1,79 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-{# ── 네이버·구글 소유확인 ───────────────────────────────── #}
-<meta name="naver-site-verification" content="여기에_네이버_인증코드">
-<meta name="google-site-verification" content="여기에_구글_인증코드">
-
-<title>{% if title %}{{ title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
-<meta name="description" content="{{ description or site.description }}">
-<link rel="canonical" href="{{ site.url }}{{ page.url }}">
-
+{%- set desc = description or site.description %}
+{%- set canonical = page.url | absUrl %}
+<title>{% if fullTitle %}{{ fullTitle }}{% elif title %}{{ title }} | {{ site.name }}{% else %}{{ site.name }}{% endif %}</title>
+<meta name="description" content="{{ desc }}">
+{%- if keywords %}
+<meta name="keywords" content="{{ keywords }}">
+{%- endif %}
+{%- if robots %}
+<meta name="robots" content="{{ robots }}">
+{%- endif %}
+<link rel="canonical" href="{{ canonical }}">
 <meta property="og:type" content="{{ ogType or 'website' }}">
-<meta property="og:site_name" content="{{ site.title }}">
-<meta property="og:title" content="{{ title or site.title }}">
-<meta property="og:description" content="{{ description or site.description }}">
-<meta property="og:url" content="{{ site.url }}{{ page.url }}">
-<meta property="og:image" content="{{ site.url }}{{ ogImage or site.ogImage }}">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ ogTitle or title or site.name }}">
+<meta property="og:description" content="{{ ogDescription or desc }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:image" content="{{ (image or site.ogImage) | absUrl }}">
 <meta name="twitter:card" content="summary_large_image">
-
-<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="/rss.xml">
-<link rel="icon" href="/assets/img/favicon.svg">
-
-{# ▼▼ 기존 사이트의 CSS 경로를 그대로 쓰세요 ▼▼ #}
+{%- if site.naverVerification %}
+<meta name="naver-site-verification" content="{{ site.naverVerification }}">
+{%- endif %}
+{%- if site.googleVerification %}
+<meta name="google-site-verification" content="{{ site.googleVerification }}">
+{%- endif %}
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="{{ site.name }} 블로그" href="/rss.xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
 <link rel="stylesheet" href="/assets/css/style.css">
-
-{% if jsonld %}<script type="application/ld+json">{{ jsonld | safe }}</script>{% endif %}
+{%- for item in jsonLd %}
+<script type="application/ld+json">{{ item | dump | safe }}</script>
+{%- endfor %}
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
 
-{# ══════════════════════════════════════════════════════════
-   여기에 기존 index.html의 <header> … </header> 를
-   그대로 잘라다 붙여넣으세요. 링크만 절대경로로 바꾸면 됩니다.
-   예) href="#products" → href="/#products"
-═══════════════════════════════════════════════════════════ #}
-<header class="site-header">
-  <a class="site-logo" href="/">
-    <img src="/assets/img/favicon.svg" alt="" width="28" height="28">
-    <span><strong>{{ site.title }}</strong><small>{{ site.tagline }}</small></span>
-  </a>
-  <nav class="site-nav">
-    <a href="/#features">특징</a>
-    <a href="/#products">제품</a>
-    <a href="/#store">무인매장</a>
-    <a href="/#cases">설치 사례</a>
-    <a href="/#faq">자주 묻는 질문</a>
-    <a href="/blog/">블로그</a>
-  </nav>
-  <a class="site-tel" href="{{ site.phoneHref }}">{{ site.phone }}</a>
-</header>
+{% include "header.njk" %}
 
 <main id="main">
 {{ content | safe }}
 </main>
 
-{# ══════════════════════════════════════════════════════════
-   여기에 기존 <footer> … </footer> 를 붙여넣으세요.
-═══════════════════════════════════════════════════════════ #}
-<footer class="site-footer">
-  <a class="site-logo" href="/">
-    <img src="/assets/img/favicon.svg" alt="" width="24" height="24">
-    <span>{{ site.title }}</span>
-  </a>
-  <nav>
-    <a href="/#products">제품</a>
-    <a href="/#store">무인매장</a>
-    <a href="/#cases">설치 사례</a>
-    <a href="/#faq">자주 묻는 질문</a>
-    <a href="/blog/">블로그</a>
-    <a href="/#contact">문의하기</a>
-  </nav>
-  <p>상담 전화 <a href="{{ site.phoneHref }}">{{ site.phone }}</a></p>
-  <p class="copy">© {{ site.year }} {{ site.title }}</p>
-</footer>
+{% include "footer.njk" %}
+
+<script src="/assets/js/main.js" defer></script>
 </body>
 </html>

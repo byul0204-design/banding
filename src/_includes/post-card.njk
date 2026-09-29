@@ -1,0 +1,9 @@
+{#- 글 카드 하나. 변수 p = 글, headingTag = 'h2' 또는 'h3' -#}
+{%- set hTag = headingTag or 'h3' %}
+      <li class="post-card"><a href="{{ p.url }}">
+        {% if p.data.image %}<div class="thumb"><img src="{{ p.data.image }}" alt="" loading="lazy" decoding="async"></div>{% else %}<div class="thumb thumb--empty">{{ site.name }}</div>{% endif %}
+        <span class="cat">{{ p.data.categoryLabel }}</span>
+        <{{ hTag }}>{{ p.data.title }}</{{ hTag }}>
+        <p>{{ p.data.description or (p.content | excerpt) }}</p>
+        <time datetime="{{ p.date | dateISO }}">{{ p.date | dateKR }}</time>
+      </a></li>

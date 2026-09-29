@@ -1,132 +1,165 @@
-# LK 홈타운 밴딩머신 — 11ty 블로그 구조
+# LK 홈타운 밴딩머신 홈페이지
 
-마크다운 파일 하나만 추가해서 푸시하면 **본문 페이지 · 블로그 목록 · 카테고리 · 메인 최신글 · sitemap.xml · rss.xml이 전부 자동으로 다시 만들어집니다.**
-기존 주소 구조(`/blog/글주소/`, `/blog/category/product/`)를 그대로 유지하므로 이미 색인된 링크가 끊기지 않습니다.
+메인 소개 페이지 + 블로그 + 관리자 모드 + 문의 폼을 갖춘 정적 사이트입니다.
+[11ty(Eleventy)](https://www.11ty.dev/)로 빌드하고, GitHub에 올리면 Netlify가 자동으로 배포합니다.
+
+글을 하나 추가하면 **글 페이지 · 블로그 목록 · 카테고리 · 메인 '블로그 새 글' · sitemap.xml · rss.xml** 이 모두 자동으로 다시 만들어집니다.
+
+---
+
+## 폴더 구조
 
 ```
-├── eleventy.config.js          빌드 설정 (거의 손댈 일 없음)
-├── netlify.toml                Netlify 빌드 설정
+├── eleventy.config.js        빌드 설정 (필터·컬렉션, 거의 손댈 일 없음)
+├── netlify.toml              Netlify 배포 설정
 ├── package.json
-└── src/
-    ├── _data/site.js           사이트 이름·주소·전화번호  ← 여기 먼저 확인
+└── src/                      ★ 사이트 원본은 전부 여기에
+    ├── index.njk             메인 페이지 (문구·사양·FAQ·설치 사례)
+    ├── index.11tydata.js     메인 페이지 검색엔진용 업체 정보
+    ├── _data/
+    │   ├── settings.json     전화번호·사업자 정보·인증 코드 (관리자 > 사이트 설정이 저장하는 곳)
+    │   └── site.js           사이트 이름·주소·카테고리 목록
     ├── _includes/
-    │   ├── base.njk            공통 뼈대 (header/footer 붙여넣는 곳)
-    │   └── post.njk            글 상세 레이아웃 + JSON-LD
-    ├── index.njk               메인 페이지
+    │   ├── base.njk          모든 페이지 공통 뼈대 (<head>, 머리말, 꼬리말)
+    │   ├── header.njk        머리말 (상단 메뉴)
+    │   ├── footer.njk        꼬리말 (사업자 정보, 하단 고정 버튼)
+    │   ├── post.njk          글 상세 레이아웃
+    │   ├── post-card.njk     블로그 목록의 글 카드
+    │   └── cat-nav.njk       카테고리 탭
     ├── blog/
-    │   ├── index.njk           블로그 목록
-    │   ├── category.njk        카테고리 페이지 (자동 생성)
-    │   └── posts/              ★ 글은 전부 여기에
-    │       ├── posts.json      글 공통 설정 (주소 규칙 등)
-    │       ├── _TEMPLATE.md.txt   새 글 쓸 때 복사해 쓰는 틀
-    │       └── *.md            실제 글
-    ├── admin/                  Decap CMS (선택)
-    ├── assets/                 이미지·CSS·JS
-    ├── sitemap.njk  rss.njk  robots.txt
+    │   ├── index.njk         블로그 목록 (12개씩 페이지 나눔)
+    │   ├── category.njk      카테고리 페이지 (글이 있는 카테고리만 자동 생성)
+    │   └── posts/            ★ 블로그 글 (.md)
+    │       └── posts.11tydata.js   글 공통 규칙 (주소, 카테고리 이름 등)
+    ├── assets/
+    │   ├── css/style.css     디자인 (색상·글꼴은 맨 위 :root)
+    │   ├── js/main.js        메뉴·탭·문의 폼 동작
+    │   ├── img/              사이트 사진
+    │   └── uploads/          관리자 모드에서 올린 이미지
+    ├── admin/                관리자 모드 (Decap CMS)
+    ├── thanks.njk  404.njk   문의 완료 · 페이지 없음 화면
+    ├── sitemap.njk  rss.njk  robots.njk
+    └── naver….html           네이버 소유확인 파일 (지우지 마세요)
 ```
 
----
-
-## 1. 옮겨 붙이는 작업 (한 번만)
-
-지금 사이트의 디자인을 그대로 살리려면 세 가지를 옮기시면 됩니다.
-
-**① 이미지와 CSS**
-기존 저장소의 `assets/` 폴더를 통째로 `src/assets/` 로 복사하세요.
-`src/assets/css/style.css` 는 제가 임시로 만든 파일이니 **기존 파일로 덮어쓰시고**, 그 뒤에 이 임시 파일의 블로그용 클래스(`.post-list`, `.post-body`, `.blog-filter` 등)만 필요한 만큼 이어 붙이시면 됩니다.
-
-**② 헤더와 푸터**
-`src/_includes/base.njk` 안에 표시해 둔 두 자리에 기존 `index.html`의 `<header>…</header>` 와 `<footer>…</footer>` 를 그대로 붙여넣으세요.
-앵커 링크만 절대경로로 바꿔야 합니다. `href="#products"` → `href="/#products"`
-
-**③ 메인 페이지**
-`src/index.njk` 의 표시된 자리에 기존 `index.html`의 `<main>` 안쪽 내용을 붙여넣으세요.
-맨 아래 '블로그 새 글' 세 칸은 이미 자동 반복문으로 넣어 두었으니, 기존 HTML의 그 부분은 빼고 붙이시면 됩니다.
-
-> `src/_data/site.js` 의 주소·전화번호·인증코드와 `src/_includes/base.njk` 의 네이버·구글 소유확인 메타태그도 확인해 주세요.
+`_site/`, `node_modules/` 는 빌드할 때 자동으로 생기므로 GitHub에 올리지 않습니다(`.gitignore`).
 
 ---
 
-## 2. 내 컴퓨터에서 확인하기
+## 글 쓰는 방법
 
-```bash
-npm install          # 처음 한 번만
-npm run dev          # http://localhost:8080
+### 방법 1. 관리자 모드 (권장)
+
+1. `https://내사이트/admin/` → GitHub으로 로그인
+2. **블로그 글 → 새 글** → 제목, 글 주소(영문), 카테고리, 대표 이미지, 본문 입력
+3. 오른쪽 위 **발행** → 1~2분 뒤 사이트에 반영
+
+### 방법 2. 파일 직접 추가
+
+`src/blog/posts/` 에 `.md` 파일을 만들고 GitHub에 올리면 됩니다.
+
+```markdown
+---
+title: 학원 자판기 설치 후기
+slug: academy-vending-machine          # 글 주소 → /blog/academy-vending-machine/
+date: 2026-10-01T09:00:00+09:00
+category: cases                        # product | cases | startup | tip | notice
+thumbnail: /assets/uploads/사진.webp    # 대표 이미지 (선택)
+coverAlt: 학원 복도에 놓인 음료 자판기    # 대표 이미지 설명 (선택)
+description: 검색 결과에 보이는 요약. 80~150자 권장.
+tags:
+  - 학원 자판기
+draft: false                           # true 면 사이트에 나오지 않음
+---
+
+본문을 마크다운으로 씁니다.
 ```
-
-`npm run dev` 를 켜두면 파일을 저장할 때마다 화면이 바로 갱신됩니다.
-
----
-
-## 3. Netlify 설정 바꾸기
-
-이제 빌드 단계가 생겼으므로 Netlify 설정을 한 번 바꿔야 합니다.
-`netlify.toml` 에 이미 들어 있어서 보통은 자동으로 잡히지만, 화면에서 직접 확인하시려면:
-
-| 항목 | 값 |
-| --- | --- |
-| Build command | `npm run build` |
-| Publish directory | `_site` |
-| Node version | 22 |
-
-푸시하면 Netlify가 빌드해서 배포합니다. 실패하면 Deploys 탭의 로그에 이유가 나옵니다.
-
----
-
-## 4. 글 발행하기 (매일 하는 일)
-
-```bash
-cp src/blog/posts/_TEMPLATE.md.txt src/blog/posts/새-글-주소.md
-# 내용 작성 후
-git add . && git commit -m "글: 제목" && git push
-```
-
-`새-글-주소.md` 의 파일 이름이 그대로 주소가 됩니다.
-`/blog/새-글-주소/` 로 열립니다. 영문 소문자와 하이픈을 쓰세요.
-
-머리말(front matter)에서 챙길 것은 다섯 가지입니다.
 
 | 항목 | 설명 |
 | --- | --- |
-| `title` | 제목 |
-| `description` | 요약. 검색 결과에 그대로 보입니다 |
-| `date` | 발행일 `2026-09-20` |
-| `category` | `product` / `startup` / `case` / `tip` |
-| `cover` | 대표 사진 경로 |
+| `slug` | 글 주소. 비워 두면 파일 이름이 주소가 됩니다. **발행 후에는 바꾸지 마세요** (검색에 등록된 주소가 깨짐) |
+| `thumbnail` 또는 `cover` | 대표 이미지. 둘 중 하나만 쓰면 됩니다 |
+| `description` | 비워 두면 목록에는 본문 앞부분이 대신 보입니다 |
+| `updated` | 글을 크게 고쳤을 때 수정일 (선택) |
 
-`draft: true` 를 넣으면 빌드에서 빠져 사이트에 나오지 않습니다.
-카테고리를 새로 만들고 싶으면 `src/blog/posts/posts.json` 의 이름표 목록에 한 줄만 추가하면 됩니다.
+팁
+- 대표 이미지는 가로 1200px 정도의 가로형 사진, **WebP 또는 JPG로 500KB 이하**를 권장합니다. PNG 사진은 용량이 매우 커져 페이지가 느려집니다.
+- 발행 후 네이버 서치어드바이저 → **요청 → 웹 페이지 수집**에 글 주소를 넣으면 더 빨리 노출됩니다.
 
-**발행 후 30초**
-네이버 서치어드바이저 → 요청 → 웹페이지 수집에 그날 글 주소를 넣으세요.
-sitemap과 RSS는 빌드 때 자동으로 갱신되므로 따로 손댈 필요가 없습니다.
+### 카테고리 추가·변경
 
----
-
-## 5. 브라우저에서 글쓰기 (선택)
-
-`src/admin/` 에 Decap CMS를 넣어 두었습니다. 설정하면 `/admin/` 에서 글을 쓰고 저장만 해도 깃허브에 커밋이 올라가서, 휴대폰으로도 발행할 수 있습니다.
-
-다만 **인증 설정이 따로 필요합니다.** 기본값인 `git-gateway` 는 Netlify Identity를 켜야 동작하는데, 신규 사이트에서는 활성화가 제한되는 경우가 있습니다. 그럴 때는 `src/admin/config.yml` 의 backend를 GitHub 방식으로 바꾸고 OAuth 앱을 따로 연결해야 합니다.
-
-번거로우시면 이 폴더는 지우고 4번 방식(파일 추가 후 푸시)만 쓰셔도 발행에는 아무 문제가 없습니다. 지금 사이트에 이미 `/admin/` 페이지가 있다면 충돌하지 않도록 둘 중 하나만 남기세요.
+`src/_data/site.js` 의 `categories` 와 `src/admin/config.yml` 의 카테고리 선택지, **두 곳**을 같이 고치세요.
 
 ---
 
-## 6. 확인 목록
+## 내 컴퓨터에서 미리보기 (Node.js 18 이상)
 
-옮긴 뒤 아래를 한 번씩 열어 보세요.
+```bash
+npm install          # 처음 한 번만
+npm run dev          # http://localhost:8080  (파일을 저장하면 자동 새로고침)
+npm run build        # _site 폴더만 만들기
+```
 
-- `/blog/` 목록에 글 3개가 보이는지
-- `/blog/lk-hometown-vending-machine/` 등 기존 주소가 그대로 열리는지
-- `/blog/category/product/` 가 열리는지
-- `/sitemap.xml` 에 모든 글이 들어 있는지
-- `/rss.xml` 이 열리는지
-- 메인 하단 '블로그 새 글'이 최신 3개로 채워지는지
+관리자 모드를 로컬에서 테스트하려면 터미널을 하나 더 열어 `npm run cms` 실행 후 `http://localhost:8080/admin/` 접속.
+(로컬에서 쓴 글은 내 컴퓨터 파일에만 저장되니, GitHub에 올려야 사이트에 반영돼요)
 
 ---
 
-## 참고
+## 처음 설정 (한 번만)
 
-`src/blog/posts/` 의 글 3편은 현재 운영 중인 사이트를 보고 다시 옮겨 적은 것입니다.
-원문과 문장이 다를 수 있으니, 기존 HTML에 있던 본문으로 바꿔 두시는 편이 좋습니다.
+### 1. Netlify 연결
+
+1. [app.netlify.com](https://app.netlify.com) → **Add new site → Import an existing project → GitHub** → 저장소 선택
+2. 빌드 설정은 `netlify.toml` 에 들어 있으니 그대로 **Deploy**
+   (Build command `npm run build` · Publish directory `_site` · Node 22)
+3. 빌드가 실패하면 Netlify **Deploys** 탭의 로그에 이유가 나옵니다.
+
+### 2. 관리자 로그인 (GitHub 로그인)
+
+1. GitHub → **Settings → Developer settings → OAuth Apps → New OAuth App**
+   - Homepage URL: 내 사이트 주소
+   - Authorization callback URL: **`https://api.netlify.com/auth/done`**
+2. **Client ID** 복사, **Generate a new client secret** 으로 Secret 생성 후 복사
+3. Netlify → **Site configuration → Access & security → OAuth → Install provider → GitHub** → 붙여넣기
+4. `https://내사이트/admin/` → **GitHub으로 로그인**
+
+> 저장소에 쓰기 권한이 있는 GitHub 계정만 로그인할 수 있어요. 직원을 추가하려면 저장소 **Settings → Collaborators** 에서 초대하세요.
+
+### 3. 사이트 설정
+
+`/admin` → **사이트 설정 → 기본 정보 · 네이버 연동** 에서 입력 후 **발행**
+
+- 상담 전화번호 (사이트의 모든 전화 버튼에 반영)
+- 상담 가능 시간, 사업자 정보 (사이트 하단에 표시)
+- 도메인을 연결했다면 사이트 주소 (비워 두면 Netlify 기본 주소 사용)
+
+### 4. 네이버 서치어드바이저
+
+1. [searchadvisor.naver.com](https://searchadvisor.naver.com) → 사이트 등록 → 소유확인
+   (HTML 파일 방식은 `src/naver….html` 로 이미 되어 있고, HTML 태그 방식을 쓰려면 `content="..."` 값만 `/admin` 사이트 설정에 붙여넣기)
+2. **요청 → 사이트맵 제출**: `https://내사이트/sitemap.xml`
+3. **요청 → RSS 제출**: `https://내사이트/rss.xml`
+
+구글도 같은 방식입니다 (Search Console → HTML 태그 → 구글 인증 코드 칸).
+
+---
+
+## 문의 폼
+
+메인 페이지 문의 폼으로 들어온 내용은 Netlify → **Forms → contact** 에서 볼 수 있어요.
+이메일 알림: **Site configuration → Notifications → Form submission notifications → Email**. (무료 플랜 월 100건)
+
+---
+
+## 내용 수정 위치
+
+| 바꾸고 싶은 것 | 위치 |
+| --- | --- |
+| 전화번호, 사업자 정보, 상담 시간 | `/admin` → 사이트 설정 (코드 수정 불필요) |
+| 메인 페이지 문구·사양·FAQ·설치 사례 | `src/index.njk` |
+| 상단 메뉴 / 하단 정보 | `src/_includes/header.njk` / `footer.njk` |
+| 글 상세 화면 (하단 상담 안내 등) | `src/_includes/post.njk` |
+| 사진 | `src/assets/img/` |
+| 색상·글꼴 | `src/assets/css/style.css` 맨 위 `:root` |
+| 블로그 카테고리 | `src/_data/site.js` 와 `src/admin/config.yml` (두 곳 모두) |
+| 메인에 보이는 최신 글 개수 | `src/_data/site.js` 의 `postsOnHome` |
