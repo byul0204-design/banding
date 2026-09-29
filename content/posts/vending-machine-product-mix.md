@@ -2,7 +2,7 @@
 title: 업종별 자판기 상품 구성 가이드, 사무실·학교·헬스장은 무엇이 팔릴까
 date: 2026-09-28
 category: tip
-thumbnail: /assets/uploads/1.png
+thumbnail: thumbnail: /assets/img/office-drink-vending.webp
 description: 같은 자판기라도 어디에 두느냐에 따라 팔리는 상품이 다릅니다. 사무실, 학교, 헬스장, 스터디카페 등 업종별 추천 상품과
   피해야 할 상품, 트레이 규격까지 정리했습니다.
 cover: /assets/img/office-drink-vending.webp
