@@ -59,6 +59,16 @@ export default function (eleventyConfig) {
     .replace(/<a href="(https?:\/\/[^"]+)"/g, (m, href) =>
       href.startsWith(site.url) ? m : `<a href="${href}" target="_blank" rel="noopener"`));
 
+  // 본문의 '## 자주 묻는 질문' 아래 '### 질문' + 답변을 뽑아 FAQ 구조화 데이터로
+  eleventyConfig.addFilter('faqItems', (html = '') => {
+    const m = String(html).match(/<h2[^>]*>\s*자주 묻는 질문\s*<\/h2>([\s\S]*?)(?=<h2|$)/);
+    if (!m) return [];
+    return m[1].split(/<h3[^>]*>/).slice(1).map((part) => {
+      const [q, a = ''] = part.split(/<\/h3>/);
+      return { q: stripHtml(q), a: stripHtml(a) };
+    }).filter((x) => x.q && x.a);
+  });
+
   // CDATA 안전하게 감싸기 (RSS)
   eleventyConfig.addFilter('cdata', (s = '') => `<![CDATA[${String(s).replace(/]]>/g, ']]]]><![CDATA[>')}]]>`);
 

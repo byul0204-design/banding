@@ -4,6 +4,10 @@ ogType: article
 current: blog
 ---
 {%- set canonical = page.url | absUrl -%}
+{%- set faqs = content | faqItems %}
+{%- if faqs.length %}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for f in faqs %}{"@type":"Question","name":{{ f.q | dump | safe }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | dump | safe }}}}{% if not loop.last %},{% endif %}{% endfor %}]}</script>
+{%- endif %}
 <article class="post"><div class="post-wrap">
   <nav class="crumbs" aria-label="현재 위치"><a href="/">홈</a><span aria-hidden="true">›</span><a href="/blog/">블로그</a><span aria-hidden="true">›</span><a href="/blog/category/{{ categoryKey }}/">{{ categoryLabel }}</a></nav>
   <a class="post-cat" href="/blog/category/{{ categoryKey }}/">{{ categoryLabel }}</a>
