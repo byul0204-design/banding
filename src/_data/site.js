@@ -7,12 +7,13 @@ const settings = JSON.parse(fs.readFileSync(new URL('./settings.json', import.me
 const phone = (settings.phone || '010-7773-2425').trim();
 
 /* 블로그 카테고리 (src/admin/config.yml 의 선택지와 같아야 합니다) */
+// desc: 카테고리 페이지의 검색 설명(meta description)과 상단 소개 문구
 const categories = [
-  { key: 'product', label: '제품 소개' },
-  { key: 'cases', label: '설치 사례' },
-  { key: 'startup', label: '창업·운영 정보' },
-  { key: 'tip', label: '운영 팁' },
-  { key: 'notice', label: '공지사항' },
+  { key: 'product', label: '제품 소개', desc: 'LK 광고형 홈타운 밴딩머신과 칸마다 잠기는 냉동 블록형 쇼케이스의 기능, 사양, 공간별 활용 방법을 소개합니다.' },
+  { key: 'cases', label: '설치 사례', desc: '카페, 학원, 병원, 호텔, 회사, 캠핑장 등 실제로 스마트 자판기를 설치한 공간의 사례를 모았습니다.' },
+  { key: 'startup', label: '창업·운영 정보', desc: '자판기·무인매장 창업 비용, 입지 분석, 영업신고, 자리 계약처럼 무인 창업을 준비할 때 알아야 할 정보를 정리했습니다.' },
+  { key: 'tip', label: '운영 팁', desc: '업종별 상품 구성, 회사 복지 자판기 운영 방식처럼 자판기를 설치한 뒤 매출과 만족도를 높이는 운영 방법을 정리했습니다.' },
+  { key: 'notice', label: '공지사항', desc: 'LK 홈타운 밴딩머신의 새 소식과 안내 사항을 전합니다.' },
 ];
 
 export default {
@@ -34,4 +35,5 @@ export default {
   buildTime: new Date(),
   categories,
   categoryLabel: (key) => (categories.find((c) => c.key === key) || {}).label || key,
+  categoryDesc: (key) => (categories.find((c) => c.key === key) || {}).desc || '',
 };

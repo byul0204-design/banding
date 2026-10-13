@@ -8,12 +8,12 @@ pagination:
 permalink: "/blog/category/{{ cat.key }}/"
 eleventyComputed:
   title: "{{ cat.label }} | 블로그"
-  description: "{{ cat.label }} 관련 글 모음"
+  description: "{{ cat.label }}: {{ site.categoryDesc(cat.key) or (cat.label + ' 관련 글 모음') }}"
   currentCat: "{{ cat.key }}"
 ---
 <section class="page-head"><div class="wrap">
   <h1>{{ cat.label }}</h1>
-  <p>글 {{ cat.posts.length }}개</p>
+  <p>{% if site.categoryDesc(cat.key) %}{{ site.categoryDesc(cat.key) }} {% endif %}글 {{ cat.posts.length }}개</p>
 </div></section>
 <section class="blog-body"><div class="wrap">
   {% include "cat-nav.njk" %}
