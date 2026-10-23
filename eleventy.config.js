@@ -8,6 +8,24 @@
  *  npm run dev     → http://localhost:8080 미리보기 (저장하면 자동 새로고침)
  */
 import site from './src/_data/site.js';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const readBanners = () => {
+  try { return JSON.parse(fs.readFileSync('src/_data/banners.json', 'utf8')); } catch { return {}; }
+};
+const escAttr = (s = '') => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+// 배너 하나를 HTML로. 이미지 폴더가 비어 있으면 아무것도 출력하지 않음
+const bannerHtml = (key) => {
+  const b = readBanners()[key];
+  const dir = path.join('src/assets/img/banners', key);
+  if (!b || !fs.existsSync(dir)) return '';
+  const files = fs.readdirSync(dir).filter((f) => /\.(webp|jpe?g|png)$/i.test(f)).sort();
+  if (!files.length) return '';
+  const imgs = files.map((f, i) => `<img src="/assets/img/banners/${key}/${f}" alt="${i === 0 ? escAttr(b.alt) : ''}" loading="lazy" decoding="async">`).join('');
+  const body = b.link ? `<a href="${escAttr(b.link)}" aria-label="${escAttr(b.label || '')}">${imgs}</a>` : imgs;
+  return `<figure class="promo-banner" data-banner="${key}">${body}</figure>`;
+};
 
 const TZ = 'Asia/Seoul';
 
@@ -57,7 +75,22 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter('postHtml', (html = '') => String(html)
     .replace(/<img /g, '<img loading="lazy" decoding="async" ')
     .replace(/<a href="(https?:\/\/[^"]+)"/g, (m, href) =>
-      href.startsWith(site.url) ? m : `<a href="${href}" target="_blank" rel="noopener"`));
+      href.startsWith(site.url) ? m : `<a href="${href}" target="_blank" rel="noopener"`)
+    // 본문의 <!-- banner:이름 --> 자리에 반복 배너를 넣음
+    .replace(/<!--\s*banner:([a-z0-9-]+)\s*-->/g, (m, key) => bannerHtml(key)));
+
+  // 반복 배너 (워드프레스 스니펫 역할)
+  // 이미지: src/assets/img/banners/<이름>/ 폴더의 파일을 이름순으로 이어 붙임
+  // 설정: src/_data/banners.json (alt, 링크, 자동으로 붙일 카테고리)
+  // auto 에 적은 카테고리 글은 본문 끝에 자동으로 붙고, 본문에 이미 넣었으면 다시 붙이지 않음
+  eleventyConfig.addFilter('autoBanners', (categoryKey, html = '') => {
+    const all = readBanners();
+    return Object.keys(all)
+      .filter((key) => (all[key].auto || []).includes(categoryKey))
+      .filter((key) => !new RegExp(`<!--\\s*banner:${key}\\s*-->`).test(String(html)))
+      .map((key) => bannerHtml(key))
+      .join('');
+  });
 
   // 본문의 '## 자주 묻는 질문' 아래 '### 질문' + 답변을 뽑아 FAQ 구조화 데이터로
   eleventyConfig.addFilter('faqItems', (html = '') => {

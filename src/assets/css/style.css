@@ -646,3 +646,11 @@ fieldset.field { border: 0; margin: 0 0 18px; padding: 0; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* 반복 배너 (src/_data/banners.json) */
+.promo-banner { max-width: 860px; margin: 40px auto; }
+.promo-banner a { display: block; }
+.promo-banner img, .prose .promo-banner img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; }
+.promo-banner img:first-child { border-radius: 14px 14px 0 0; }
+.promo-banner img:last-child { border-radius: 0 0 14px 14px; }
+.promo-banner img:only-child { border-radius: 14px; }

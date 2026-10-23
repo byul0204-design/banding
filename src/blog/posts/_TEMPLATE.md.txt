@@ -2,7 +2,7 @@
 title: "여기에 제목을 씁니다"
 description: "검색 결과와 목록에 그대로 보이는 요약입니다. 80~140자를 권합니다."
 date: 2026-09-20
-category: startup          # product | startup | case | tip
+category: startup          # product | startup | cases | tip | local(지역별 설치 안내)
 cover: /assets/img/사진파일.webp
 coverAlt: "사진에 대한 설명"
 # updated: 2026-10-01      # 나중에 고쳤을 때만 추가

@@ -73,6 +73,7 @@ collections:
           - { label: 설치 사례, value: cases }
           - { label: 창업·운영 정보, value: startup }
           - { label: 운영 팁, value: tip }
+          - { label: 지역별 설치 안내, value: local }
           - { label: 공지사항, value: notice }
 
       - label: 대표 이미지

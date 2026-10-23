@@ -19,6 +19,7 @@ current: blog
   <div class="prose">
 {{ content | postHtml | safe }}
   </div>
+  {{ categoryKey | autoBanners(content) | safe }}
   {%- if postTags.length %}
   <ul class="tags" aria-label="태그">{% for t in postTags %}<li>#{{ t }}</li>{% endfor %}</ul>
   {%- endif %}
