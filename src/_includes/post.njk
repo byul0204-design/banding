@@ -16,10 +16,11 @@ current: blog
   {%- if image %}
   <figure class="post-cover"><img src="{{ image }}" alt="{{ coverAlt }}" fetchpriority="high"></figure>
   {%- endif %}
+  {{ categoryKey | autoBanners(content, 'top') | safe }}
   <div class="prose">
 {{ content | postHtml | safe }}
   </div>
-  {{ categoryKey | autoBanners(content) | safe }}
+  {{ categoryKey | autoBanners(content, 'bottom') | safe }}
   {%- if postTags.length %}
   <ul class="tags" aria-label="태그">{% for t in postTags %}<li>#{{ t }}</li>{% endfor %}</ul>
   {%- endif %}
