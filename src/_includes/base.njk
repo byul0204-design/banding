@@ -10,9 +10,7 @@
 {%- if keywords %}
 <meta name="keywords" content="{{ keywords }}">
 {%- endif %}
-{%- if robots %}
-<meta name="robots" content="{{ robots }}">
-{%- endif %}
+<meta name="robots" content="{{ robots or 'index, follow, max-image-preview:large' }}">
 <link rel="canonical" href="{{ canonical }}">
 <meta property="og:type" content="{{ ogType or 'website' }}">
 <meta property="og:site_name" content="{{ site.name }}">
@@ -21,6 +19,10 @@
 <meta property="og:url" content="{{ canonical }}">
 <meta property="og:image" content="{{ (image or site.ogImage) | absUrl }}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ (image or site.ogImage) | absUrl }}">
+{%- if page.url == "/" %}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":{{ site.name | dump | safe }},"alternateName":"LK 밴딩머신","url":"{{ '/' | absUrl }}"}</script>
+{%- endif %}
 {%- if site.naverVerification %}
 <meta name="naver-site-verification" content="{{ site.naverVerification }}">
 {%- endif %}
