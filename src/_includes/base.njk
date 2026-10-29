@@ -32,7 +32,7 @@
 <link rel="alternate" type="application/rss+xml" title="{{ site.name }} 블로그" href="/rss.xml">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/style.css?v={{ build.v }}">
 {%- for item in jsonLd %}
 <script type="application/ld+json">{{ item | dump | safe }}</script>
 {%- endfor %}
@@ -48,6 +48,6 @@
 
 {% include "footer.njk" %}
 
-<script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/main.js?v={{ build.v }}" defer></script>
 </body>
 </html>
