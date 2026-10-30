@@ -22,7 +22,7 @@ const bannerHtml = (key) => {
   if (!b || !fs.existsSync(dir)) return '';
   const files = fs.readdirSync(dir).filter((f) => /\.(webp|jpe?g|png)$/i.test(f)).sort();
   if (!files.length) return '';
-  const imgs = files.map((f, i) => `<img src="/assets/img/banners/${key}/${f}" alt="${i === 0 ? escAttr(b.alt) : ''}" loading="lazy" decoding="async">`).join('');
+  const imgs = files.map((f, i) => `<img data-banner-src="/assets/img/banners/${key}/${f}" alt="${i === 0 ? escAttr(b.alt) : ''}" loading="lazy" decoding="async">`).join('');
   const body = b.link ? `<a href="${escAttr(b.link)}" aria-label="${escAttr(b.label || '')}">${imgs}</a>` : imgs;
   return `<figure class="promo-banner" data-banner="${key}">${body}</figure>`;
 };

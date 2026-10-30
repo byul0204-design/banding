@@ -51,5 +51,6 @@
 {% include "footer.njk" %}
 
 <script src="/assets/js/main.js?v={{ build.v }}" defer></script>
+<script>/* 반복 배너: 검색 로봇이 대표 이미지로 고르지 않도록 화면에서만 이미지 주소를 채움 */document.querySelectorAll("img[data-banner-src]").forEach(function(i){i.src=i.getAttribute("data-banner-src");});</script>
 </body>
 </html>
