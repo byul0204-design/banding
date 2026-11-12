@@ -44,7 +44,7 @@ current: blog
 <section class="related section--white"><div class="wrap">
   <h2>함께 읽으면 좋은 글</h2>
   <ul class="post-grid">
-    {%- for p in related %}{% include "post-card.njk" %}{% endfor %}
+    {%- set relatedThumb = true %}{%- for p in related %}{% include "post-card.njk" %}{% endfor %}
   </ul>
 </div></section>
 {%- endif %}
