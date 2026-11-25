@@ -29,6 +29,9 @@
 {%- if site.googleVerification %}
 <meta name="google-site-verification" content="{{ site.googleVerification }}">
 {%- endif %}
+{%- if site.bingVerification %}
+<meta name="msvalidate.01" content="{{ site.bingVerification }}">
+{%- endif %}
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="{{ site.name }} 블로그" href="/rss.xml">

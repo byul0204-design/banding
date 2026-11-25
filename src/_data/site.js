@@ -28,6 +28,7 @@ export default {
   hours: (settings.hours || '').trim(),
   naverVerification: String(settings.naverVerification || '').trim(),
   googleVerification: String(settings.googleVerification || '').trim(),
+  bingVerification: String(settings.bingVerification || '').trim(),
   company: settings.company || {},
   ogImage: '/assets/img/og-image.jpg',
   postsPerPage: 12,
